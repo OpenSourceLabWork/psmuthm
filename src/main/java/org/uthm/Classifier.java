@@ -7,23 +7,45 @@ import weka.core.converters.ConverterUtils.DataSource;
 public class Classifier {
 	static SupportVectorMachine svmc;
 	static NaiveBayesClassifier nbc;
+	static DecisionTreeClassifier dtc;
 	
 	public static void main(String[] args) throws Exception{
 		
-		DataSource source = new DataSource("datasets/iris.arff");
-		Instances dataset = source.getDataSet();
-		dataset.setClassIndex(dataset.numAttributes()-1);
+		// CSVLoader loader = new CSVLoader();
+		// loader.setSource(App.class.getResourceAsStream("weather.csv"));
+		// Instances data = loader.getDataSet();
+
+		
+		
+		DataSource source_train = new DataSource("datasets/iris-train.arff");
+		Instances dataset_train = source_train.getDataSet();
+//		dataset_train.setClassIndex(dataset_train.numAttributes()-1);
+		
+		DataSource source_test = new DataSource("datasets/iris-unknown.arff");
+		Instances dataset_test = source_test.getDataSet();
+		
+		
 		
 		svmc = new SupportVectorMachine();
 		nbc = new NaiveBayesClassifier();
+		dtc = new DecisionTreeClassifier();
 		
+		System.out.println("_______________________________________________");
+		System.out.println("Decision Tree classification results");
+		String dtResult = dtc.run(dataset_train,dataset_test);
+		System.out.println(dtResult);
+		System.out.println("_______________________________________________");
 		
-		String svmResult = svmc.run(dataset);
+		System.out.println("SVM classification results");
+		String svmResult = svmc.run(dataset_train,dataset_test);
 		System.out.println(svmResult);
 		
-		String nbcResult = nbc.run(dataset);
+		System.out.println("_______________________________________________");
+		System.out.println("NaiveBayes classification results");
+		String nbcResult = nbc.run(dataset_train,dataset_test);
 		System.out.println(nbcResult);
-		
+		System.out.println("_______________________________________________");
+	
 		
 		/*
 		NaiveBayes nb = new NaiveBayes();
